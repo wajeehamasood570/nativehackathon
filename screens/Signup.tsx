@@ -23,13 +23,14 @@ import {
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {useDispatch} from 'react-redux';
-import {add} from '../config/redux/reducers/loginslice';
+
 // import {signUp} from '../FirebaseMethods';
 // import {Post} from '../apimethods/Apimethods';
 import axios from 'axios';
+import { add } from '../config/redux/reducers/loginslice';
 // import { Post } from '../apimethods/Apimethods';
 
-const SignUp = ({navigation}: any) => {
+const Signup = ({navigation}: any) => {
   const [model, setModel] = useState<any>({});
   const [checked, setChecked] = React.useState('first');
 
@@ -72,9 +73,15 @@ const SignUp = ({navigation}: any) => {
     //   // }
     // };
 
+    const goback = () =>{
+      navigation.goBack();
+    }
+  
+
     const adduser = async() =>{
+      console.log(model);
     try {
-      await axios.post('http://192.168.2.107:8000/auth/signup', model)
+      await axios.post('http://192.168.1.106:8000/auth/signup', model)
       .then((res:any)=>{
         navigation.reset({
             index: 0,
@@ -98,13 +105,27 @@ const SignUp = ({navigation}: any) => {
 
 
   return (
-    <View style={styles.container}>
-      <Image style={styles.image} source={require('../assets/logo.png')} />
-      <Text style={styles.title}>Registration</Text>
+    <View style={[styles.container, rncStyles.positionRelative]}>
+    {/* <Image style={styles.image} source={require('../assets/logo.png')} /> */}
+    <View style={[rncStyles.flexRow, rncStyles.justifyContentBetween]}>
+      {/* <Icon name="chevron_left" size={50} color="black" /> */}
+      {/* <Text style={[rncStyles.fs6, rncStyles.textBlack, rncStyles.py1]}>
+        Back
+      </Text> */}
+      <TouchableOpacity onPress={goback}>
+       <Image source={require('../assets/images/Backarrow.png')}/>
+      </TouchableOpacity>
+      <Text style={[styles.heading]}>Sign Up</Text>
+      <Text style={[styles.heading]}></Text>
+    </View>
+    <Text style={styles.title}>Create Account</Text>
+    <Text style={styles.paragraph}>
+      Please Enter your email address and password for Login
+    </Text>
       <View style={styles.inputView}>
         <TextInput
-          onChangeText={e => setModel({...model, name: e})}
-          value={model.name}
+          onChangeText={e => setModel({...model, Name: e})}
+          value={model.Name}
           style={styles.inputText}
           accessibilityLabel="Name"
           placeholder="Name"
@@ -113,8 +134,8 @@ const SignUp = ({navigation}: any) => {
       </View>
       <View style={styles.inputView}>
         <TextInput
-          onChangeText={e => setModel({...model, email: e})}
-          value={model.email}
+          onChangeText={e => setModel({...model, Email: e})}
+          value={model.Email}
           style={styles.inputText}
           placeholder="Email"
           placeholderTextColor="#003f5c"
@@ -122,8 +143,8 @@ const SignUp = ({navigation}: any) => {
       </View>
       <View style={styles.inputView}>
         <TextInput
-          onChangeText={e => setModel({...model, password: e})}
-          value={model.password}
+          onChangeText={e => setModel({...model, Password: e})}
+          value={model.Password}
           style={styles.inputText}
           secureTextEntry
           placeholder="Password"
@@ -151,7 +172,7 @@ const SignUp = ({navigation}: any) => {
         </View>
       </View> */}
 
-      <TouchableOpacity style={styles.loginBtn} onPress={adduser}>
+      {/* <TouchableOpacity style={styles.loginBtn} onPress={adduser}>
         <Text style={styles.btntitle} >SIGN UP </Text>
       </TouchableOpacity>
 
@@ -161,7 +182,24 @@ const SignUp = ({navigation}: any) => {
         }}
         style={styles.loginBtn}>
         <Text style={styles.btntitle}>Already user ? Login</Text>
+      </TouchableOpacity> */}
+
+
+      <TouchableOpacity onPress={adduser} style={[styles.loginBtn]}>
+        <Text style={styles.btntitle}>Sign Up</Text>
       </TouchableOpacity>
+
+        <Text style={[rncStyles.fs6, rncStyles.textBlack,rncStyles.textCenter,rncStyles.textSecondary]}>Signup with</Text>
+        <View style={[rncStyles.flexRow,rncStyles.justifyContentCenter,rncStyles.my2]}>
+          <Image style={[rncStyles.mx1]} source={require('../assets/images/Apple.png')}/>
+          <Image style={[rncStyles.mx1]} source={require('../assets/images/Google.png')}/>
+         
+        </View>
+        <TouchableOpacity  onPress={() => {
+          navigation.navigate('Login');
+        }}>
+        <Text style={[rncStyles.fs6, rncStyles.textBlack,rncStyles.textCenter,rncStyles.textSecondary]}>Have an Account? <Text style={[rncStyles.textPrimary]}>Sign In</Text></Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -169,8 +207,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     padding: 20,
   },
   title: {
@@ -178,7 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 29,
     lineHeight: 43.5,
     color: 'black',
-    marginBottom: 40,
+    marginVertical: 30,
   },
   inputView: {
     width: '100%',
@@ -200,15 +238,17 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   loginBtn: {
-    width: '80%',
-    backgroundColor: '#B28CFF',
+    width: '100%',
+    backgroundColor: '#756EF3',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 15,
+    marginTop: 50,
     marginBottom: 0,
     color: 'white',
+    bottom: 20,
+    fontSize: 16,
   },
   btntitle: {
     color: 'white',
@@ -217,5 +257,18 @@ const styles = StyleSheet.create({
     width: 186,
     height: 186,
   },
+  heading: {
+    fontFamily: 'Poppins',
+    fontSize: 28,
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#002055',
+  },
+  paragraph: {
+    fontSize: 16,
+    color: '#868D95',
+    marginBottom: 30,
+  },
+
 });
-export default SignUp;
+export default Signup;

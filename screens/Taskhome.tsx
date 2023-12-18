@@ -6,12 +6,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AddTask from './AddTask';
 import Showtask from './Showtask';
-import Taskhome from './Taskhome';
-import Comment from './Comment';
-import Profile from './Profile';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
-const Home = () => {
+const Taskhome = () => {
+  const user = useSelector((a: any) => a.login);
+  console.log(user);
+
   function getDate() {
     const today = new Date();
     const month = today.getMonth() + 1;
@@ -20,54 +20,41 @@ const Home = () => {
     return `${month}/${date}/${year}`;
   }
 
-  const Tab = createBottomTabNavigator();
-
   const [currentDate, setCurrentDate] = useState(getDate());
 
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        options={{headerShown: false, tabBarLabel: 'Home',tabBarIcon: ({ color, size }) => (
-            <Icon name="home" color={color} size={size} />
-          ),
-        }}
-        name="TaskHome"
-        component={Taskhome}
-      />
-      <Tab.Screen
-        options={{headerShown: false, tabBarLabel: 'Tasks',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="folder" color={color} size={size} />
-          ),}}
-        name="Showtask"
-        component={Showtask}
-      />
-      <Tab.Screen
-        options={{headerShown: false, tabBarLabel: 'Add',
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="add" color={color} size={size} />
-        ),}}
-        name="Addtask"
-        component={AddTask}
-      />
-      <Tab.Screen
-        options={{headerShown: false,tabBarLabel: 'comments',
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="sms" color={color} size={size} />
-        ),}}
-        name="Comment"
-        component={Comment}
-      />
-      <Tab.Screen
-        options={{headerShown: false, tabBarLabel: 'Profile',
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="person" color={color} size={size} />
-        ),}}
-        name="Profile"
-        component={Profile}
-      />
-      {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
-    </Tab.Navigator>
+    <View style={[styles.container, rncStyles.positionRelative]}>
+      {/* <Image style={styles.image} source={require('../assets/logo.png')} /> */}
+      <View style={[rncStyles.flexRow, rncStyles.justifyContentBetween]}>
+        {/* <Text style={[rncStyles.fs6, rncStyles.textBlack, rncStyles.py1]}>
+        Back
+      </Text> */}
+        <TouchableOpacity>
+          <Icon name="category" size={25} color="#002055" />
+          {/* <Image source={require('../assets/images/Backarrow.png')}/> */}
+        </TouchableOpacity>
+        <Text style={[styles.heading]}>{currentDate}</Text>
+        <Icon name="notifications" size={25} color="#002055" />
+      </View>
+
+      <View >
+        {user.auth ? (
+          <>
+            <Text style={[rncStyles.textBlack,styles.title]}>
+              Welcome {user.loginData.data.data.user.Name}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Icon name="home" size={100} color="black" />
+          </>
+        )}
+      </View>
+      <Text style={styles.title}>Let’s make a habits together 🙌</Text>
+      <Text style={styles.paragraph}>
+        Please Enter your email address and password for Login
+      </Text>
+    </View>
   );
 };
 
@@ -84,7 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 29,
     lineHeight: 43.5,
     color: 'black',
-    marginVertical: 30,
+    marginTop: 30,
     marginRight: 30,
   },
   inputView: {
@@ -141,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Taskhome;
